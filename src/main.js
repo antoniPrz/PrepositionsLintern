@@ -107,8 +107,8 @@ async function handleAnalyze() {
   hideResults();
 
   try {
-    // Simulate API call with mock data (will be replaced)
-    const data = await analyzeMock(text);
+    // Call the actual API, fallback to mock if backend is down
+    const data = await analyzeAPI(text);
 
     renderResult(data.tokens);
     renderLegend(data.tokens);
@@ -127,7 +127,29 @@ function handleClear() {
   hideError();
 }
 
-// --- Mock API (will be replaced by real fetch) ---
+// --- API Connection ---
+async function analyzeAPI(text) {
+  try {
+    const response = await fetch('http://localhost:3000/api/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.warn("Backend local no detectado. Usando datos de prueba (Mock).", error);
+    return analyzeMock(text);
+  }
+}
+
+// --- Mock API (Fallback) ---
 function analyzeMock(text) {
   return new Promise((resolve) => {
     // Simulate network delay
