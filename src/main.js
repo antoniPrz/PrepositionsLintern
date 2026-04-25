@@ -63,6 +63,7 @@ const MOCK_RESPONSE = {
 
 // --- State ---
 let isLoading = false;
+let authToken = null;
 
 // --- DOM Elements ---
 const analyzeBtn = document.getElementById('analyze-btn');
@@ -72,15 +73,30 @@ const resultsSection = document.getElementById('results-section');
 const errorSection = document.getElementById('error-section');
 const errorMessage = document.getElementById('error-message');
 
+// Auth DOM
+const authScreen = document.getElementById('auth-screen');
+const appScreen = document.getElementById('app');
+const authInput = document.getElementById('auth-input');
+const authBtn = document.getElementById('auth-btn');
+const authError = document.getElementById('auth-error');
+const usageCounter = document.getElementById('usage-counter');
+const usageCountSpan = document.getElementById('usage-count');
+
 // --- Initialize ---
 document.addEventListener('DOMContentLoaded', () => {
   initEditor();
   setupEventListeners();
+  checkAuth();
 });
 
 function setupEventListeners() {
   analyzeBtn.addEventListener('click', handleAnalyze);
   clearBtn.addEventListener('click', handleClear);
+  authBtn.addEventListener('click', handleLogin);
+  
+  authInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleLogin();
+  });
 
   // Keyboard shortcut: Ctrl/Cmd + Enter to analyze
   document.addEventListener('keydown', (e) => {
@@ -127,24 +143,103 @@ function handleClear() {
   hideError();
 }
 
+// --- Auth Flow ---
+async function checkAuth() {
+  const savedToken = localStorage.getItem('linter_invite');
+  if (savedToken) {
+    await verifyAndLogin(savedToken);
+  }
+}
+
+async function handleLogin() {
+  const token = authInput.value.trim().toUpperCase();
+  if (!token) return;
+  
+  authBtn.disabled = true;
+  authBtn.querySelector('.btn__text').textContent = 'Verificando...';
+  
+  await verifyAndLogin(token);
+  
+  authBtn.disabled = false;
+  authBtn.querySelector('.btn__text').textContent = 'Verificar y Entrar';
+}
+
+async function verifyAndLogin(token) {
+  try {
+    const res = await fetch('http://localhost:3000/api/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token })
+    });
+    
+    const data = await res.json();
+    
+    if (res.ok && data.valid) {
+      authToken = token;
+      localStorage.setItem('linter_invite', token);
+      
+      authError.hidden = true;
+      authScreen.style.display = 'none';
+      appScreen.style.display = 'flex';
+      
+      usageCounter.hidden = false;
+      usageCountSpan.textContent = data.remaining;
+    } else {
+      throw new Error(data.error || 'Código inválido');
+    }
+  } catch (error) {
+    localStorage.removeItem('linter_invite');
+    authToken = null;
+    authError.textContent = error.message;
+    authError.hidden = false;
+    authScreen.style.display = 'flex';
+    appScreen.style.display = 'none';
+  }
+}
+
+function logout(message) {
+  localStorage.removeItem('linter_invite');
+  authToken = null;
+  authInput.value = '';
+  authError.textContent = message || 'Sesión expirada';
+  authError.hidden = false;
+  authScreen.style.display = 'flex';
+  appScreen.style.display = 'none';
+}
+
 // --- API Connection ---
 async function analyzeAPI(text) {
   try {
     const response = await fetch('http://localhost:3000/api/analyze', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-invitation-token': authToken || ''
       },
       body: JSON.stringify({ text })
     });
     
+    const data = await response.json();
+
+    if (response.status === 401 || response.status === 403) {
+      logout(data.error || 'Acceso denegado');
+      throw new Error(data.error || 'Acceso denegado');
+    }
+
     if (!response.ok) {
       throw new Error(`Error HTTP: ${response.status}`);
     }
     
-    return await response.json();
+    if (data.meta && data.meta.remaining !== undefined) {
+      usageCountSpan.textContent = data.meta.remaining;
+    }
+    
+    return data;
   } catch (error) {
-    console.warn("Backend local no detectado. Usando datos de prueba (Mock).", error);
+    if (error.message.includes('Acceso denegado') || error.message.includes('invitación')) {
+      throw error;
+    }
+    console.warn("Backend local no detectado o error de red. Usando datos de prueba (Mock).", error);
     return analyzeMock(text);
   }
 }
