@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Language Linter — Analizador lingüístico con IA. Analiza frases y oraciones como un linter de código." />
+  <title>Language Linter — Analizador Lingüístico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+  <script type="module" crossorigin src="/PrepositionsLintern/assets/index-DlY4xCmI.js"></script>
+  <link rel="stylesheet" crossorigin href="/PrepositionsLintern/assets/index-ZIJaY65-.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header id="header" class="header">
+      <div class="header__terminal-bar">
+        <div class="header__dots">
+          <span class="header__dot header__dot--red"></span>
+          <span class="header__dot header__dot--yellow"></span>
+          <span class="header__dot header__dot--green"></span>
+        </div>
+        <span class="header__title">language-linter.sh</span>
+      </div>
+      <div class="header__content">
+        <h1 class="header__logo">
+          <span class="header__logo-bracket">{</span>
+          <span class="header__logo-text">Language<span class="header__logo-accent">Linter</span></span>
+          <span class="header__logo-bracket">}</span>
+        </h1>
+        <p class="header__subtitle">
+          <span class="header__prompt">$</span> Analizador lingüístico con IA
+          <span class="header__cursor">▊</span>
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main">
+      <!-- Input Section -->
+      <section id="input-section" class="section section--input">
+        <div class="section__header">
+          <div class="section__tab section__tab--active">
+            <span class="section__tab-icon">📝</span>
+            <span>input.txt</span>
+          </div>
+        </div>
+        <div class="editor" id="editor-container">
+          <div class="editor__lines" id="line-numbers">
+            <span>1</span>
+          </div>
+          <textarea
+            id="input-text"
+            class="editor__textarea"
+            placeholder="Escribe aquí la frase a analizar..."
+            spellcheck="false"
+            rows="4"
+          ></textarea>
+        </div>
+        <div class="section__actions">
+          <button id="analyze-btn" class="btn btn--primary">
+            <span class="btn__icon">▶</span>
+            <span class="btn__text">Aplicar Linter</span>
+          </button>
+          <button id="clear-btn" class="btn btn--secondary">
+            <span class="btn__icon">✕</span>
+            <span class="btn__text">Limpiar</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Loading State -->
+      <div id="loading-section" class="loading" hidden>
+        <div class="loading__terminal">
+          <div class="loading__line">
+            <span class="loading__prompt">$</span>
+            <span class="loading__text">lint --analyze input.txt</span>
+          </div>
+          <div class="loading__line loading__line--processing">
+            <span class="loading__spinner"></span>
+            <span class="loading__text">Procesando análisis lingüístico...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <section id="results-section" class="section section--results" hidden>
+        <!-- Colored Output -->
+        <div class="section__header">
+          <div class="section__tab section__tab--active">
+            <span class="section__tab-icon">🎨</span>
+            <span>output.lint</span>
+          </div>
+          <div class="section__tab">
+            <span class="section__tab-icon">📊</span>
+            <span>analysis.log</span>
+          </div>
+        </div>
+
+        <!-- Syntax Highlighted Result -->
+        <div id="result-output" class="result">
+          <div class="result__lines" id="result-line-numbers"></div>
+          <div class="result__code" id="result-code"></div>
+        </div>
+
+        <!-- Color Legend -->
+        <div id="color-legend" class="legend">
+          <h3 class="legend__title">// Leyenda de categorías</h3>
+          <div class="legend__grid" id="legend-grid"></div>
+        </div>
+
+        <!-- Detailed Analysis -->
+        <div class="section__header section__header--analysis">
+          <div class="section__tab section__tab--active">
+            <span class="section__tab-icon">📊</span>
+            <span>analysis.log</span>
+          </div>
+        </div>
+        <div id="analysis-output" class="analysis">
+          <div class="analysis__content" id="analysis-content"></div>
+        </div>
+      </section>
+
+      <!-- Error State -->
+      <div id="error-section" class="error-panel" hidden>
+        <div class="error-panel__header">
+          <span class="error-panel__icon">⚠</span>
+          <span>Error</span>
+        </div>
+        <p id="error-message" class="error-panel__message"></p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p class="footer__text">
+        <span class="footer__comment">// </span>
+        Language Linter v1.0.0 — Powered by IA
+      </p>
+    </footer>
+  </div>
+
+</body>
+</html>
