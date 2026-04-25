@@ -9,11 +9,31 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
-  <script type="module" crossorigin src="/PrepositionsLintern/assets/index-CgVoPSu7.js"></script>
-  <link rel="stylesheet" crossorigin href="/PrepositionsLintern/assets/index-COayi5fd.css">
+  <script type="module" crossorigin src="/PrepositionsLintern/assets/index-NZem_zZi.js"></script>
+  <link rel="stylesheet" crossorigin href="/PrepositionsLintern/assets/index-CQUr56vH.css">
 </head>
 <body>
-  <div id="app">
+  <!-- Auth Screen -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-container">
+      <h1 class="header__logo" style="text-align: center; margin-bottom: 24px;">
+        <span class="header__logo-bracket">{</span>
+        <span class="header__logo-text">Language<span class="header__logo-accent">Linter</span></span>
+        <span class="header__logo-bracket">}</span>
+      </h1>
+      <div class="auth-prompt">
+        <span class="header__prompt">></span> INSERTE CÓDIGO DE INVITACIÓN:
+      </div>
+      <input type="text" id="auth-input" class="auth-input" placeholder="BETA-XXXX" autocomplete="off" spellcheck="false" />
+      <button id="auth-btn" class="btn btn--primary" style="width: 100%; margin-top: 16px;">
+        <span class="btn__icon">🔑</span>
+        <span class="btn__text">Verificar y Entrar</span>
+      </button>
+      <div id="auth-error" class="auth-error" hidden></div>
+    </div>
+  </div>
+
+  <div id="app" style="display: none;">
     <!-- Header -->
     <header id="header" class="header">
       <div class="header__terminal-bar">
@@ -23,6 +43,9 @@
           <span class="header__dot header__dot--green"></span>
         </div>
         <span class="header__title">language-linter.sh</span>
+        <div id="usage-counter" class="header__usage" hidden>
+          [Usos: <span id="usage-count">-</span>]
+        </div>
       </div>
       <div class="header__content">
         <h1 class="header__logo">
