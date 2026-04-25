@@ -28,4 +28,16 @@ db.exec(`
   );
 `);
 
+// Migration: add invitation_id if it doesn't exist in older databases
+try {
+  const columns = db.pragma('table_info(analyses)');
+  const hasInvitationId = columns.some(col => col.name === 'invitation_id');
+  if (!hasInvitationId) {
+    db.exec('ALTER TABLE analyses ADD COLUMN invitation_id INTEGER REFERENCES invitations(id);');
+  }
+} catch (e) {
+  // Ignore migration errors
+  console.log('Migration note:', e.message);
+}
+
 export default db;
