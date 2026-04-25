@@ -114,26 +114,46 @@ function showTooltip(e) {
     ${detail ? `<div class="tooltip__detail">${detail}</div>` : ''}
   `;
 
-  token.style.position = 'relative';
-  token.appendChild(tooltip);
+  document.body.appendChild(tooltip);
   activeTooltip = tooltip;
 
-  // Ensure tooltip stays within viewport
+  // Calculate position relative to the whole page
+  const rect = token.getBoundingClientRect();
+  const scrollY = window.scrollY || document.documentElement.scrollTop;
+  const scrollX = window.scrollX || document.documentElement.scrollLeft;
+  
+  // Default: pop UP
+  let top = rect.top + scrollY - 8;
+  let left = rect.left + scrollX + (rect.width / 2);
+  
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
+  tooltip.style.transform = 'translate(-50%, -100%)'; // Move up by 100% of its own height
+
+  // Adjust if out of viewport
   requestAnimationFrame(() => {
-    const rect = tooltip.getBoundingClientRect();
-    if (rect.left < 8) {
-      tooltip.style.left = '0';
-      tooltip.style.transform = 'none';
-    }
-    if (rect.right > window.innerWidth - 8) {
+    const ttRect = tooltip.getBoundingClientRect();
+    let currentTransform = 'translate(-50%, -100%)';
+    
+    // Check horizontal boundaries
+    if (ttRect.left < 8) {
+      tooltip.style.left = '8px';
+      currentTransform = 'translate(0, -100%)';
+    } else if (ttRect.right > window.innerWidth - 8) {
       tooltip.style.left = 'auto';
-      tooltip.style.right = '0';
-      tooltip.style.transform = 'none';
+      tooltip.style.right = '8px';
+      currentTransform = 'translate(0, -100%)';
     }
-    if (rect.top < 8) {
-      tooltip.style.bottom = 'auto';
-      tooltip.style.top = 'calc(100% + 8px)';
+    
+    // Check vertical boundaries (if it goes above viewport, pop DOWN instead)
+    if (ttRect.top < 8) {
+      tooltip.style.top = `${rect.bottom + scrollY + 8}px`;
+      currentTransform = currentTransform.replace('-100%', '0');
+      tooltip.classList.add('tooltip--down');
     }
+    
+    tooltip.style.transform = currentTransform;
+    tooltip.style.opacity = '1';
   });
 }
 

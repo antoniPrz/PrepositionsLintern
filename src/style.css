@@ -512,9 +512,6 @@ body::before {
 /* --- Tooltip --- */
 .tooltip {
   position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
   background: var(--bg-darker);
   border: 1px solid var(--current-line);
   border-radius: var(--radius);
@@ -522,10 +519,11 @@ body::before {
   font-size: 0.7rem;
   color: var(--foreground);
   white-space: nowrap;
-  z-index: 100;
+  z-index: 9999;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   pointer-events: none;
-  animation: tooltipIn 0.2s ease;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .tooltip::after {
@@ -536,6 +534,13 @@ body::before {
   transform: translateX(-50%);
   border: 5px solid transparent;
   border-top-color: var(--current-line);
+}
+
+.tooltip.tooltip--down::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--current-line);
 }
 
 .tooltip__category {
