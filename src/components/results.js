@@ -5,16 +5,13 @@
 
 /** Category color map matching CSS classes */
 const CATEGORY_MAP = {
-  sustantivo:   { label: 'Sustantivo',   emoji: '🔵' },
-  verbo:        { label: 'Verbo',        emoji: '🟢' },
-  adjetivo:     { label: 'Adjetivo',     emoji: '🟠' },
-  adverbio:     { label: 'Adverbio',     emoji: '🩷' },
-  preposicion:  { label: 'Preposición',  emoji: '🟣' },
-  determinante: { label: 'Determinante', emoji: '⚪' },
-  pronombre:    { label: 'Pronombre',    emoji: '🟡' },
-  conjuncion:   { label: 'Conjunción',   emoji: '🔴' },
-  puntuacion:   { label: 'Puntuación',   emoji: '⚪' },
-  interjeccion: { label: 'Interjección', emoji: '💜' },
+  raw:         { label: 'RAW',        emoji: '🟢' },
+  accesible:   { label: 'ACCESIBLE',  emoji: '🟦' },
+  ficcion:     { label: 'FICCIÓN',    emoji: '🟠' },
+  poly:        { label: 'POLY',       emoji: '⚠️' },
+  indefinido:  { label: 'INDEFINIDO', emoji: '🟣' },
+  dangling:    { label: 'DANGLING',   emoji: '🔴' },
+  texto_plano: { label: 'Plano',      emoji: '⚪' }
 };
 
 /**

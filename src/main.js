@@ -11,39 +11,54 @@ import { renderAnalysis } from './components/analysis.js';
 // --- Mock Data (will be replaced by API calls) ---
 const MOCK_RESPONSE = {
   tokens: [
-    { word: 'El',           category: 'determinante', detail: 'Artículo definido, masculino singular' },
-    { word: 'gato',         category: 'sustantivo',   detail: 'Sustantivo común, masculino singular' },
-    { word: 'negro',        category: 'adjetivo',     detail: 'Adjetivo calificativo, masculino singular' },
-    { word: 'corre',        category: 'verbo',        detail: 'Verbo "correr", presente indicativo, 3ª persona singular' },
-    { word: 'muy',          category: 'adverbio',     detail: 'Adverbio de cantidad/intensidad' },
-    { word: 'rápidamente',  category: 'adverbio',     detail: 'Adverbio de modo, derivado de "rápido"' },
-    { word: 'por',          category: 'preposicion',  detail: 'Preposición de lugar/tránsito' },
-    { word: 'el',           category: 'determinante', detail: 'Artículo definido, masculino singular' },
-    { word: 'tejado',       category: 'sustantivo',   detail: 'Sustantivo común, masculino singular' },
-    { word: 'y',            category: 'conjuncion',   detail: 'Conjunción copulativa' },
-    { word: 'él',           category: 'pronombre',    detail: 'Pronombre personal, 3ª persona singular' },
-    { word: 'salta',        category: 'verbo',        detail: 'Verbo "saltar", presente indicativo, 3ª persona singular' },
-    { word: 'hacia',        category: 'preposicion',  detail: 'Preposición de dirección' },
-    { word: 'la',           category: 'determinante', detail: 'Artículo definido, femenino singular' },
-    { word: 'luna',         category: 'sustantivo',   detail: 'Sustantivo común, femenino singular' },
-    { word: '.',            category: 'puntuacion',   detail: 'Punto final' },
+    { word: 'Podemos',            category: 'texto_plano', detail: '' },
+    { word: 'explicar',           category: 'poly',        detail: 'POLY heredado de PQ0. ¿Deducción, mecanismo, función?' },
+    { word: 'cómo',               category: 'texto_plano', detail: '' },
+    { word: 'el',                 category: 'texto_plano', detail: '' },
+    { word: 'cerebro',            category: 'raw',         detail: 'Objeto físico C1/C2, bien anclado' },
+    { word: 'procesa',            category: 'poly',        detail: 'Oscila entre proceso causal C2 o abstracción funcional C3' },
+    { word: 'señales',            category: 'accesible',   detail: 'Procesos C2, medibles' },
+    { word: ',',                  category: 'texto_plano', detail: '' },
+    { word: 'pero',               category: 'texto_plano', detail: '' },
+    { word: 'no',                 category: 'texto_plano', detail: '' },
+    { word: 'tenemos',            category: 'texto_plano', detail: '' },
+    { word: 'una',                category: 'texto_plano', detail: '' },
+    { word: 'explicación',        category: 'poly',        detail: 'POLY no declarado' },
+    { word: 'lógica',             category: 'texto_plano', detail: '' },
+    { word: 'de',                 category: 'texto_plano', detail: '' },
+    { word: 'por',                category: 'texto_plano', detail: '' },
+    { word: 'qué',                category: 'texto_plano', detail: '' },
+    { word: 'ese',                category: 'texto_plano', detail: '' },
+    { word: 'procesamiento',      category: 'poly',        detail: 'Oscila entre C2 y C3' },
+    { word: 'se',                 category: 'texto_plano', detail: '' },
+    { word: 'siente',             category: 'dangling',    detail: 'Uso de "what it is like" sin referente intersubjetivo' },
+    { word: 'como',               category: 'texto_plano', detail: '' },
+    { word: 'algo',               category: 'texto_plano', detail: '' },
+    { word: '.',                  category: 'texto_plano', detail: '' },
+    { word: '¿Cómo',              category: 'texto_plano', detail: '' },
+    { word: 'surge',              category: 'poly',        detail: '¿Emergencia? ¿Causación? ¿Identidad?' },
+    { word: 'la',                 category: 'texto_plano', detail: '' },
+    { word: 'experiencia',        category: 'dangling',    detail: 'Asume que refiere a algo real y determinado (nuclear)' },
+    { word: 'subjetiva',          category: 'dangling',    detail: 'Ídem' },
+    { word: '(qualia)',           category: 'dangling',    detail: 'Referente no localizable en ninguna capa de forma consistente' },
+    { word: 'a',                  category: 'texto_plano', detail: '' },
+    { word: 'partir',             category: 'texto_plano', detail: '' },
+    { word: 'de',                 category: 'texto_plano', detail: '' },
+    { word: 'materia',            category: 'raw',         detail: 'C1/C2' },
+    { word: 'inerte',             category: 'ficcion',     detail: 'Atribución de capa C5 disfrazada de C1' },
+    { word: '?',                  category: 'texto_plano', detail: '' },
   ],
-  analysis: `Oración compuesta coordinada copulativa formada por dos proposiciones unidas por la conjunción "y".
-
-Primera proposición: "El gato negro corre muy rápidamente por el tejado"
-• Sujeto: "El gato negro" — Sintagma nominal (determinante + núcleo + adyacente)
-• Predicado verbal: "corre muy rápidamente por el tejado"
-  - Núcleo: "corre" (verbo intransitivo)
-  - CCModo: "muy rápidamente" (sintagma adverbial con intensificador)
-  - CCLugar: "por el tejado" (sintagma preposicional)
-
-Segunda proposición: "él salta hacia la luna"
-• Sujeto: "él" — Pronombre personal
-• Predicado verbal: "salta hacia la luna"
-  - Núcleo: "salta" (verbo intransitivo)
-  - CCDirección: "hacia la luna" (sintagma preposicional)
-
-Tipo de oración: Enunciativa afirmativa, compuesta coordinada copulativa.`
+  etapas: {
+    ci: "Argumento (Input de tipo mixto).\nEl input tiene estructura de premisa -> brecha -> pregunta-conclusión. Usa una afirmación descriptiva implícita sobre el estado de la ciencia y un presupuesto normativo sobre qué cuenta como explicación.",
+    lo: "Capa pretendida: C1/C2 (límite explicativo empírico).\nLocalización real: 'cerebro' en C1/C2, pero 'qualia' y 'experiencia subjetiva' no tienen localización estable en ninguna capa. 'Materia inerte' pretende C1 pero opera en C5 (definición impuesta).",
+    ac: "Patología 1: DANGLING en posición absolutamente nuclear ('qualia'). Impacto constitutivo.\nPatología 2: Atribución de capa en 'materia inerte'.\nPatología 3: Inflación conceptual en la brecha explicativa.\nPatología 4: Parasitismo semántico ('experiencia' toma prestada la solidez de 'procesamiento').",
+    pei: "Claim central: Existe una brecha explicativa irreducible que exige un tipo de explicación distinto.\nPresupuestos: 'qualia' refiere a algo real, 'materia' es por defecto no-experiencial.\nFricción termodinámica: Infinita. No genera predicciones ni procedimientos operacionales.",
+    dd: "D1: Flexibilidad Semántica - Deficiente.\nD2: Calibración de certeza - Deficiente.\nD4: Apertura a falsificación - Crítica (infalsificable por construcción).\nD3: Transparencia de marco - Crítica.",
+    ve: {
+      clasificacion: "Reformulable",
+      texto: "El input parte de un POLY no resuelto en 'explicación', usa ese POLY para construir una brecha, asigna a un lado un término DANGLING ('qualia') tratado como C1, y pregunta cómo se conectan. La aparente profundidad viene de construir sobre términos sin estatus ontológico validado.\n\nReformulación: '¿El concepto de experiencia subjetiva refiere a algo ontológicamente distinto de los procesos físicos, o es un artefacto de limitaciones en nuestro marco actual? Y si es distinto, ¿bajo qué condiciones podría ser verificado intersubjetivamente?'"
+    }
+  }
 };
 
 // --- State ---

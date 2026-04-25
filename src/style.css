@@ -22,17 +22,14 @@
   --red:             #ff5555;
   --yellow:          #f1fa8c;
 
-  /* Semantic Mapping: Grammar Categories */
-  --cat-sustantivo:    var(--cyan);
-  --cat-verbo:         var(--green);
-  --cat-adjetivo:      var(--orange);
-  --cat-adverbio:      var(--pink);
-  --cat-preposicion:   var(--purple);
-  --cat-determinante:  var(--comment);
-  --cat-pronombre:     var(--yellow);
-  --cat-conjuncion:    var(--red);
-  --cat-puntuacion:    var(--foreground);
-  --cat-interjeccion:  #e0a3ff;
+  /* Semantic Mapping: Epistemic Categories */
+  --cat-raw:        var(--green);
+  --cat-accesible:  var(--cyan);
+  --cat-ficcion:    var(--orange);
+  --cat-poly:       var(--yellow);
+  --cat-indefinido: var(--purple);
+  --cat-dangling:   var(--red);
+  --cat-texto_plano: var(--foreground);
 
   /* UI */
   --font-mono:  'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
@@ -485,16 +482,13 @@ body::before {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.token--sustantivo    { color: var(--cat-sustantivo); }
-.token--verbo         { color: var(--cat-verbo); }
-.token--adjetivo      { color: var(--cat-adjetivo); }
-.token--adverbio      { color: var(--cat-adverbio); }
-.token--preposicion   { color: var(--cat-preposicion); }
-.token--determinante  { color: var(--cat-determinante); }
-.token--pronombre     { color: var(--cat-pronombre); }
-.token--conjuncion    { color: var(--cat-conjuncion); }
-.token--puntuacion    { color: var(--cat-puntuacion); }
-.token--interjeccion  { color: var(--cat-interjeccion); }
+.token--raw         { color: var(--cat-raw); font-weight: bold; }
+.token--accesible   { color: var(--cat-accesible); }
+.token--ficcion     { color: var(--cat-ficcion); }
+.token--poly        { color: var(--cat-poly); text-decoration: underline dotted var(--yellow); }
+.token--indefinido  { color: var(--cat-indefinido); font-style: italic; }
+.token--dangling    { color: var(--cat-dangling); border-bottom: 2px solid var(--red); }
+.token--texto_plano { color: var(--cat-texto_plano); opacity: 0.7; }
 
 /* Token underline effect */
 .token::after {

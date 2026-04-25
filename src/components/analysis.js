@@ -17,10 +17,40 @@ export function renderAnalysis(data) {
   const tokenSection = createSection('Análisis por Palabra', renderTokenList(data.tokens));
   content.appendChild(tokenSection);
 
-  // Full analysis section
-  if (data.analysis) {
-    const analysisSection = createSection('Análisis Completo', renderAnalysisText(data.analysis));
-    content.appendChild(analysisSection);
+  // Render stages if available
+  if (data.etapas) {
+    if (data.etapas.ci) content.appendChild(createSection('Etapa 0 - Clasificación (CI)', renderAnalysisText(data.etapas.ci)));
+    if (data.etapas.lo) content.appendChild(createSection('Etapa 2 - Localización Ontológica (LO)', renderAnalysisText(data.etapas.lo)));
+    if (data.etapas.ac) content.appendChild(createSection('Etapa 3 - Auditoría de Capa (AC)', renderAnalysisText(data.etapas.ac)));
+    if (data.etapas.pei) content.appendChild(createSection('Etapa 4 - Pipeline Epistémico (PEI)', renderAnalysisText(data.etapas.pei)));
+    if (data.etapas.dd) content.appendChild(createSection('Etapa 5 - Diagnóstico Dimensional (DD)', renderAnalysisText(data.etapas.dd)));
+    
+    if (data.etapas.ve) {
+      const veContainer = document.createElement('div');
+      
+      const badge = document.createElement('div');
+      badge.style.display = 'inline-block';
+      badge.style.padding = '4px 8px';
+      badge.style.borderRadius = '4px';
+      badge.style.marginBottom = '8px';
+      badge.style.fontWeight = 'bold';
+      badge.style.textTransform = 'uppercase';
+      
+      const cls = data.etapas.ve.clasificacion;
+      if (cls === 'Válido') badge.style.backgroundColor = 'rgba(80, 250, 123, 0.2)';
+      else if (cls === 'Inválido') badge.style.backgroundColor = 'rgba(255, 85, 85, 0.2)';
+      else if (cls === 'Indefinido') badge.style.backgroundColor = 'rgba(189, 147, 249, 0.2)';
+      else badge.style.backgroundColor = 'rgba(241, 250, 140, 0.2)'; // Reformulable
+      
+      badge.textContent = `Veredicto: ${cls}`;
+      veContainer.appendChild(badge);
+      veContainer.appendChild(renderAnalysisText(data.etapas.ve.texto));
+      
+      content.appendChild(createSection('Etapa 6 - Veredicto Estructurado (VE)', veContainer));
+    }
+  } else if (data.analysis) {
+    // Fallback for old mock data
+    content.appendChild(createSection('Análisis Completo', renderAnalysisText(data.analysis)));
   }
 }
 
